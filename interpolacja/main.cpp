@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <iomanip>
 #include <string>
 #include <conio.h>
@@ -22,17 +23,20 @@ int main()
 	std::vector<double> y;
 	std::vector<double> Ly;
 	std::vector<double> error;//nazwa robocza
+	std::stringstream sstream;
 
-	std::string fileName="raport.txt";
-
+	
 	std::cout << "Podaj dolny zakres:";
 	std::cin >> downRange;
 	std::cout << "Podaj gorny zakres:";
 	std::cin >> upRange;
 	std::cout << "Podaj liczbe wezlow:";
 	std::cin >> n;
-	std::cout << "Podaj nazwe pliku dla raportu :";
-	std::cin >> fileName;
+	sstream << "(" << downRange << "'" << upRange << ")n" << n << ".txt";
+	std::string fileName = sstream.str();
+	std::cout << fileName<<"\n";
+	//std::cout << "Podaj nazwe pliku dla raportu :";
+	//std::cin >> fileName;
 
 	//obliczanie wezlow rownoleglych
 	parallelNodes(n, downRange, upRange, x);	

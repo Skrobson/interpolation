@@ -1,17 +1,28 @@
 #include "Interpolation.h"
 #include <iostream>
 
+NewtonInterpolation::NewtonInterpolation(const std::vector<double>& x, const std::vector<double>& y):mX(x),mY(y)
+{
+	mNodes = mX.size()-1;
+	differentialQuotient();
+}
 
-Interpolation::Interpolation()
+NewtonInterpolation::NewtonInterpolation(const double * x, const double * y, size_t n):mNodes(n-1)
+{
+	for (size_t i = 0; i < n; ++i)
+	{
+		mX.push_back(x[i]);
+		mY.push_back(y[i]);
+	}
+	differentialQuotient();
+}
+
+NewtonInterpolation::~NewtonInterpolation()
 {
 }
 
 
-Interpolation::~Interpolation()
-{
-}
-
-double Interpolation::factorPolynomialial(int degree, double x)
+double NewtonInterpolation::factorPolynomialial(size_t degree, double x)
 {
 	if (degree == 0)
 		return 1;
@@ -25,7 +36,8 @@ double Interpolation::factorPolynomialial(int degree, double x)
 	return tmp ;
 }
 
-double Interpolation::differentialQuotient(int n )
+
+double NewtonInterpolation::differentialQuotient(size_t n )
 {
 	double sum = 0.0;
 	for (int i = 0; i <= n; ++i)
@@ -41,22 +53,56 @@ double Interpolation::differentialQuotient(int n )
 		}
 		sum += (mY[i] / quotient);
 	}
-	std::cout << "iloraz roznicowy stopnia " << n << " " << sum << std::endl;
+	//std::cout << "iloraz roznicowy stopnia " << n << " " << sum << std::endl;
 	return sum;
 }
 
-void Interpolation::setNodes(int n)
+void NewtonInterpolation::differentialQuotient()
 {
-	nodes = n;
+	mAi.clear();
+	for (size_t i = 0; i <= mNodes; ++i)
+	{
+		mAi.push_back(differentialQuotient(i));
+	}
 }
 
-double Interpolation::newton(double x)
+
+
+void NewtonInterpolation::setArrays(const std::vector<double>& x, const std::vector<double>& y)
+{
+	mNodes = mX.size() - 1;
+	mX.clear();
+	mX = x;
+	mY.clear();
+	mY = y;
+	differentialQuotient();
+}
+
+void NewtonInterpolation::setArrays(const double * x, const double * y, size_t size)
+{
+	mX.clear();
+	mY.clear();
+	mNodes = size-1;
+	for (size_t i = 0; i <size; ++i)
+	{
+		mX.push_back(x[i]);
+		mY.push_back(y[i]);
+	}
+	differentialQuotient();
+}
+
+double NewtonInterpolation::compute(double x)
 {
 	double temp = 0.0;
-	for (int i = 0; i <= nodes; ++i)
+	for (size_t i = 0; i <= mNodes; ++i)
 	{
-		temp += (differentialQuotient(i)*factorPolynomialial(i, x));
+		temp += (mAi[i]*factorPolynomialial(i, x));
 	}
 	
 	return temp;
+}
+
+double absoluteError(double fx, double Lx)
+{
+	return abs(fx-Lx);
 }

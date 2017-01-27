@@ -4,7 +4,6 @@
 #include <iomanip>
 #include <string>
 #include <conio.h>
-#include "mathUtils.h"
 #include "Interpolation.h"
 
 void reportMini(std::ostream& output, const std::vector<double>& x, const std::vector<double>& y);

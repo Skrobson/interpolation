@@ -137,7 +137,4 @@ double NewtonInterpolation::compute(double x)
 	return temp;
 }
 
-double absoluteError(double fx, double Lx)
-{
-	return abs(fx-Lx);
-}
+

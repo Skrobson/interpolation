@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-#include "mathUtils.h"
 #include <algorithm>
 
 const double PI = 3.141592653589793238463;
